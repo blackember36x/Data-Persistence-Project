@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class MenuHandler : MonoBehaviour
@@ -8,23 +10,27 @@ public class MenuHandler : MonoBehaviour
 
     string playerName;
 
-    [SerializeField] Text PlayerInput;
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] Text playerInput;
+    
+
+    public void StartGame()
     {
         
+        SceneManager.LoadScene(1);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SetPlayerName()
     {
-        
+        PlayerDataHandler.Instance.playerName = playerInput.text;
     }
 
-    public void GetPlayerName()
+    public void ExitGame()
     {
-        playerName = PlayerInput.text;
-        Debug.Log(playerName);
+#if UNITY_EDITOR
+        EditorApplication.ExitPlaymode();
+#else
+        Application.Quit();
+#endif
     }
 
 }

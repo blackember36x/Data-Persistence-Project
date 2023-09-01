@@ -11,6 +11,7 @@ public class MainManager : MonoBehaviour
     public Rigidbody Ball;
 
     public Text ScoreText;
+    public Text playerName, bestPlayerName, bestScore;
     public GameObject GameOverText;
     
     private bool m_Started = false;
@@ -22,6 +23,11 @@ public class MainManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
+        playerName.text = "Name: " + PlayerDataHandler.Instance.playerName;
+        bestPlayerName.text = "Best Player: " + PlayerDataHandler.Instance.bestPlayer;
+        bestScore.text = "Highest Score: " + PlayerDataHandler.Instance.bestScore;
+
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
         
@@ -40,6 +46,10 @@ public class MainManager : MonoBehaviour
 
     private void Update()
     {
+        playerName.text = "Name: " + PlayerDataHandler.Instance.playerName;
+        bestPlayerName.text = "Best Player: " + PlayerDataHandler.Instance.bestPlayer;
+        bestScore.text = "Highest Score: " + PlayerDataHandler.Instance.bestScore;
+
         if (!m_Started)
         {
             if (Input.GetKeyDown(KeyCode.Space))
@@ -59,6 +69,12 @@ public class MainManager : MonoBehaviour
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             }
+
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                SceneManager.LoadScene(0);
+            }
+
         }
     }
 
@@ -70,6 +86,15 @@ public class MainManager : MonoBehaviour
 
     public void GameOver()
     {
+        
+
+        if (m_Points > PlayerDataHandler.Instance.bestScore)
+        {
+            
+            PlayerDataHandler.Instance.bestScore = m_Points;
+            PlayerDataHandler.Instance.bestPlayer = PlayerDataHandler.Instance.playerName;
+            PlayerDataHandler.Instance.SaveNewHighScoreAndName();
+        }
         m_GameOver = true;
         GameOverText.SetActive(true);
     }
